@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "lib": ["es6","dom"],
+    "outDir":"dist",
+    "paths": {
+      "*":["../front/bin/*"],
+      "plugin-draw/*": ["./bin/*"]
+    }
+  },
+  "exclude": [
+    "./source/*",
+  ]
+}
