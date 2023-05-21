@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const VDom_1 = require("VDom");
+const KeyEvent_1 = require("KeyEvent");
 class Draw {
     handle() { }
     constructor() {
@@ -95,6 +96,38 @@ class Draw {
             sourceY = 0;
         }
         this._draw.drawImage(this._imageBuffer, sourceX, sourceY, this.width * 2, this.height * 2, this.left, this.top, this.width, this.height);
+        return this;
+    }
+    onkeyArrowLeft(downCallback, upCallback) {
+        KeyEvent_1.default.onArrowLeft(downCallback, upCallback);
+        return this;
+    }
+    onkeyArrowRight(downCallback, upCallback) {
+        KeyEvent_1.default.onArrowRight(downCallback, upCallback);
+        return this;
+    }
+    onkeyArrowUp(downCallback, upCallback) {
+        KeyEvent_1.default.onArrowUp(downCallback, upCallback);
+        return this;
+    }
+    onKeyArrowDown(downCallback, upCallback) {
+        KeyEvent_1.default.onArrowDown(downCallback, upCallback);
+        return this;
+    }
+    onKeyEnter(downCallback, upCallback) {
+        KeyEvent_1.default.onEnter(downCallback, upCallback);
+        return this;
+    }
+    onKeySpace(downCallback, upCallback) {
+        KeyEvent_1.default.onSpace(downCallback, upCallback);
+        return this;
+    }
+    onKeyNumber(keyNumber, downCallback, upCallback) {
+        KeyEvent_1.default.onNumber(keyNumber, downCallback, upCallback);
+        return this;
+    }
+    onKey(fullKeyName, downCallback, upCallback) {
+        KeyEvent_1.default.on(fullKeyName, downCallback, upCallback);
         return this;
     }
     addDraw(draw) {
