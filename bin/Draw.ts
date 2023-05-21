@@ -9,6 +9,7 @@ export default class Draw{
     private _childDraw = [];
     private _destroy = false;
     private _framelate = 33;
+    private _framestopped = false;
     private _imageBuffer = null;
 
     private _position = {
@@ -94,6 +95,14 @@ export default class Draw{
         this._background = val;
     }
 
+    get framelate(){
+        return this._framelate;
+    }
+
+    set framelate(val){
+        this._framelate = val;
+    }
+
     clear(){
         this._draw.clearRect(
             this.left,
@@ -159,6 +168,46 @@ export default class Draw{
         return this;
     }
 
+    line(){
+        this._draw.strokeStyle = this._background;
+        this._draw.lineWidth  = 1;
+        this._draw.beginPath();
+        this._draw.moveTo(this.left, this.top);
+        this._draw.lineTo(this.width, this.height);
+        this._draw.stroke();
+        return this;
+    }
+
+    zoomIn(step? : number){
+        if(!step){
+            step = 1;
+        }
+
+        this.left -= step;
+        this.top -= step;
+        this.width += step * 2;
+        this.height += step * 2;
+
+        return this;
+    }
+
+    zoomOut(step? : number){
+        if(!step){
+            step = 1;
+        }
+
+        if(this.width < 0 || this.height < 0){
+            return this;
+        }
+
+        this.left += step;
+        this.top += step;
+        this.width -= step * 2;
+        this.height -= step * 2;
+
+        return this;
+    }
+
     onkeyArrowLeft(downCallback : Function, upCallback? : Function){
         KeyEvent.onArrowLeft(downCallback,upCallback);
         return this;
@@ -207,6 +256,10 @@ export default class Draw{
     begin(callback? : Function){
 
         const __begin__ = ()=>{
+            
+            if(this._framestopped){
+                return;
+            }
 
             this.clear();
             this.handle();
@@ -229,6 +282,16 @@ export default class Draw{
 
         __begin__();
         this._interval = setInterval(__begin__, this._framelate);
+    }
+
+    pause(){
+        this._framestopped = true;
+        return this;
+    }
+
+    resume(){
+        this._framestopped = false;
+        return this;
     }
 
     stop(){

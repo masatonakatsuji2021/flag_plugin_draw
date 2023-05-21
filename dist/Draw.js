@@ -8,6 +8,7 @@ class Draw {
         this._childDraw = [];
         this._destroy = false;
         this._framelate = 33;
+        this._framestopped = false;
         this._imageBuffer = null;
         this._position = {
             x: 0,
@@ -69,6 +70,12 @@ class Draw {
     set background(val) {
         this._background = val;
     }
+    get framelate() {
+        return this._framelate;
+    }
+    set framelate(val) {
+        this._framelate = val;
+    }
     clear() {
         this._draw.clearRect(this.left, this.top, this.width, this.height);
         return this;
@@ -96,6 +103,38 @@ class Draw {
             sourceY = 0;
         }
         this._draw.drawImage(this._imageBuffer, sourceX, sourceY, this.width * 2, this.height * 2, this.left, this.top, this.width, this.height);
+        return this;
+    }
+    line() {
+        this._draw.strokeStyle = this._background;
+        this._draw.lineWidth = 1;
+        this._draw.beginPath();
+        this._draw.moveTo(this.left, this.top);
+        this._draw.lineTo(this.width, this.height);
+        this._draw.stroke();
+        return this;
+    }
+    zoomIn(step) {
+        if (!step) {
+            step = 1;
+        }
+        this.left -= step;
+        this.top -= step;
+        this.width += step * 2;
+        this.height += step * 2;
+        return this;
+    }
+    zoomOut(step) {
+        if (!step) {
+            step = 1;
+        }
+        if (this.width < 0 || this.height < 0) {
+            return this;
+        }
+        this.left += step;
+        this.top += step;
+        this.width -= step * 2;
+        this.height -= step * 2;
         return this;
     }
     onkeyArrowLeft(downCallback, upCallback) {
@@ -136,6 +175,9 @@ class Draw {
     }
     begin(callback) {
         const __begin__ = () => {
+            if (this._framestopped) {
+                return;
+            }
             this.clear();
             this.handle();
             if (callback) {
@@ -152,6 +194,14 @@ class Draw {
         };
         __begin__();
         this._interval = setInterval(__begin__, this._framelate);
+    }
+    pause() {
+        this._framestopped = true;
+        return this;
+    }
+    resume() {
+        this._framestopped = false;
+        return this;
     }
     stop() {
         clearInterval(this._interval);
